@@ -1,5 +1,3 @@
-project
-=======
 /*------------------------------------------------------
          Template taken from vecadd
 --------------------------------------------------------*/
@@ -12,18 +10,19 @@ project
 #define N 200 //number of simus
 #define blocksize 32
 
-static void launch_simple_kernel(float *X, float Y, int Inputsize)
+
+static void launch_simple_kernel(float *X, float Y, float *max, float *min, float maximum, float minimum)
  {
     dim3 dimGrid(blocksize,1,1);
     dim3 dimBlock(M,(N-1)/blocksize+1,1);
-    sum_simple_kernel<<<dimGrid,dimBlock>>>(float *X,float Y,int Inputsize);
+    sum_simple_kernel<<<dimGrid,dimBlock>>>(float *X, float Y, float *max, float *min, float maximum, float minimum);
 }
 
-static void launch_improved_kernel(float *X, float Y, int Inputsize)
+static void launch_improved_kernel(float *X, float Y, float *max, float *min, float maximum, float minimum,int Inputsize)
  {
     dim3 dimGrid(blocksize,1,1);
     dim3 dimBlock(M,(N-1)/blocksize+1,1);
-    sum_improved_kernel<<<dimGrid,dimBlock>>>(float *X,float Y,int Inputsize);
+    sum_improved_kernel<<<dimGrid,dimBlock>>>(float *X, float Y, float *max, float *min, float maximum, float minimum);
 }
 
 
@@ -76,12 +75,12 @@ int main(float *X,float Y, int InputSize) {
     __syncthreads();
 
     startTime(&timer);
-    launch_simple_kernel(X, Y, Inputsize);
+    launch_simple_kernel(float X, float Y, float max, float min, float maximum, float minimum);
     stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
 
     startTime(&timer);
-    launch_improved_kernel(X, Y, Inputsize);
+    launch_improved_kernel(float X, float Y, float max, float min, float maximum, float minimum);
     stopTime(&timer); printf("%f s\n", elapsedTime(timer));
 
     
